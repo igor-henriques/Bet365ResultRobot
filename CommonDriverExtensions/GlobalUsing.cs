@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CommonDriverExtensions
-{
-    internal class GlobalUsing
-    {
-    }
-}
+﻿global using OpenQA.Selenium;
+global using OpenQA.Selenium.Chrome;
+global using OpenQA.Selenium.Support.UI;
+global using CommonDriverExtensions.Interfaces;
+global using System.Diagnostics;

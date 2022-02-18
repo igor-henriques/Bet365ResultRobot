@@ -1,9 +1,9 @@
-﻿namespace MainRobotOrchester;
+﻿namespace MainRobotOrchester.Workers;
 
-public class StartService : BackgroundService
+public class StartForm : BackgroundService
 {
     private readonly IServiceProvider _services;
-    public StartService(IServiceProvider services)
+    public StartForm(IServiceProvider services)
     {
         this._services = services;
     }

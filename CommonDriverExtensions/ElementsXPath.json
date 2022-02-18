@@ -1,0 +1,22 @@
+﻿{
+  "EuroCup": {
+    "FirstOdd": "",
+    "SecondOdd": "",
+    "ThirdOdd": ""
+  },
+  "WorldCup": {
+    "FirstOdd": "",
+    "SecondOdd": "",
+    "ThirdOdd": ""
+  },
+  "Premiership": {
+    "FirstOdd": "",
+    "SecondOdd": "",
+    "ThirdOdd": ""
+  },
+  "Superleague": {
+    "FirstOdd": "",
+    "SecondOdd": "",
+    "ThirdOdd": ""
+  }
+}
