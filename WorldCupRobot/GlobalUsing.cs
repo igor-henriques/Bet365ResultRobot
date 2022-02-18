@@ -1,0 +1,9 @@
+﻿global using Microsoft.Extensions.Hosting;
+global using CommonUtils.Configurations;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.EntityFrameworkCore;
+global using MainRobotOrchester.Forms;
+global using MainRobotOrchester;
+global using CommonDatabase.Data;
+global using CommonDatabase.Entities;
