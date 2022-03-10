@@ -4,7 +4,7 @@ public class ElementsCSS
 {
     [JsonProperty("EventoIniciadoLabel")]
     public string EventoIniciadoLabel;
-    
+
     [JsonProperty("CounterGameClosing")]
     public string CounterGameClosing;
 

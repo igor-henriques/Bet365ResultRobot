@@ -170,7 +170,7 @@ public class PremiershipWorker : BackgroundService, IWorker
             };
 
             await matchNextRepository.InsertAsync(matchNext);
-            
+
             odd.IdMatchNext = (int)matchNext.Id;
 
             await oddRepository.InsertAsync(odd);

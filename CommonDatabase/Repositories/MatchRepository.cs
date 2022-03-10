@@ -9,8 +9,8 @@ public class MatchRepository
     {
         this.context = context;
         this.logger = logger;
-    } 
-    
+    }
+
     public async Task<Match> GetMatchAsync(string title, DateTime date)
     {
         return await context.Matches.FirstOrDefaultAsync(x => x.Title == title && x.Date == date);

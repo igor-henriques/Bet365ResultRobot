@@ -17,20 +17,20 @@
             while (attempts > 0)
             {
                 try
-                {                    
+                {
                     response = await function();
 
                     if (!response.Equals(default(T)))
-                        break;                    
+                        break;
                 }
-                catch (Exception e) 
-                { 
+                catch (Exception e)
+                {
                     logger?.LogError($"Tentativa falhou. Tentativas restantes: {--attempts}\n{e.Message}");
 
-                    if (attempts <= 0) throw; 
+                    if (attempts <= 0) throw;
                 }
-            }     
-            
+            }
+
             return response;
         }
 

@@ -17,17 +17,17 @@ public partial class MainForm : Form
 
     private readonly Settings settings;
 
-    public MainForm(IHostedService euroCupWorker, Settings settings/*, IHostedService premiershipWorker, IHostedService superleagueWorker, IHostedService worldCupWorker*/)
+    public MainForm(IHostedService euroCupWorker, Settings settings, IHostedService premiershipWorker, IHostedService superleagueWorker, IHostedService worldCupWorker)
     {
         InitializeComponent();
 
         this.RobotsVerifier = new System.Threading.Timer(x => VerifyRobots(), null, 0, 1000);
         this.LogsCleaner = new System.Threading.Timer(x => CleanLogs(), null, settings.TimeToResetLogsInHours * 3_600_000, settings.TimeToResetLogsInHours * 3_600_000);
-        this.euroCupWorker = euroCupWorker as EuroCupWorker;
         this.settings = settings;
-        /*this.premiershipWorker = premiershipWorker as PremiershipWorker;
+        this.euroCupWorker = euroCupWorker as EuroCupWorker;
+        this.premiershipWorker = premiershipWorker as PremiershipWorker;
         this.superleagueWorker = superleagueWorker as SuperleagueWorker;
-        this.worldCupWorker = worldCupWorker as WorldCupWorker;*/
+        this.worldCupWorker = worldCupWorker as WorldCupWorker;
     }
 
     private void ChangeRobotStatusDescription(ToolStripStatusLabel statusElement, Color color, EStatusRobot status)

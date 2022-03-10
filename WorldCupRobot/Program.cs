@@ -7,8 +7,6 @@ ChromeOptions options = new ChromeOptions();
 options.AddArguments(new List<string>()
 {
     "--disable-blink-features=AutomationControlled",
-    //"--no-startup-window",
-    //"--headless",
     "--disable-dev-shm-usage",
     "--no-sandbox",
     "--disable-impl-side-painting",
@@ -54,7 +52,7 @@ await Host.CreateDefaultBuilder()
         services.AddHostedService<EuroCupWorker>();
         services.AddHostedService<PremiershipWorker>();
         services.AddHostedService<SuperleagueWorker>();
-        services.AddHostedService<WorldCupWorker>();    
+        services.AddHostedService<WorldCupWorker>();
 
         services.AddLogging(builder =>
         {

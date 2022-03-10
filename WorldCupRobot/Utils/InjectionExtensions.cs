@@ -11,7 +11,7 @@ public static class InjectionExtensions
     public static void ConfigureElementsXPathInjection(this IServiceCollection services)
     {
         services.AddSingleton(
-            JsonConvert.DeserializeObject<ElementsXPath>(value: File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Configurations/ElementsXPath.json"))));        
+            JsonConvert.DeserializeObject<ElementsXPath>(value: File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "Configurations/ElementsXPath.json"))));
     }
 
     public static void ConfigureElementsCSSInjection(this IServiceCollection services)

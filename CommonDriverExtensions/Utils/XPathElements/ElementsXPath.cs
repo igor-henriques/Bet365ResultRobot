@@ -55,5 +55,5 @@ public class ElementsXPath
     public readonly WorldcupElements WorldcupElements;
 
     [JsonProperty("Events")]
-    public readonly Events Events;    
+    public readonly Events Events;
 }
