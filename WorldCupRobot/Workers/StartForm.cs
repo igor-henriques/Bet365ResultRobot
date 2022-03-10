@@ -8,13 +8,13 @@ public class StartForm : BackgroundService
         this._services = services;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(1000);
+
         Application.SetHighDpiMode(HighDpiMode.SystemAware);
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(_services.GetRequiredService<MainForm>());
-
-        return Task.CompletedTask;
     }
 }

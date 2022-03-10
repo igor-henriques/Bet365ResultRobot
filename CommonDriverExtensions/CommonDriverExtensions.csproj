@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ElementsXPath.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ElementsXPath.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="4.1.0" />
 	  <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
 	  <PackageReference Include="Selenium.Support" Version="4.1.0" />

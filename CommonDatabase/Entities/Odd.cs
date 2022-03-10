@@ -156,4 +156,28 @@ public partial record Odd
     public decimal ParaOtimeMarcarSimnaoAmbasMarcam { get; set; }
     public decimal ParaOtimeMarcarSimnaoCasaNao { get; set; }
     public decimal ParaOtimeMarcarSimnaoVisitanteNao { get; set; }
+
+    public static implicit operator string(Odd odd)
+    {
+        StringBuilder sb = new();
+
+        foreach (var prop in odd.GetType().GetProperties())
+        {
+            sb.AppendLine($"{prop.Name}:{prop.GetValue(odd)}");
+        }
+
+        return sb.ToString();
+    }
+
+    public override string ToString()
+    {
+        StringBuilder sb = new();
+
+        foreach (var prop in this.GetType().GetProperties())
+        {
+            sb.AppendLine($"{prop.Name}:{prop.GetValue(this)}");
+        }
+
+        return sb.ToString();
+    }
 }

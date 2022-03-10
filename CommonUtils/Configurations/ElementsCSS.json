@@ -1,0 +1,11 @@
+﻿{
+  "EventoIniciadoLabel": "vr-MarketGroup_RaceOff",
+  "CounterGameClosing": "vr-MarketGroup_BookCloses",
+  "SelectedEvent": "vr-EventTimesNavBarButton-selected",
+  "EventTab": "vr-EventTimesNavBarButton",
+  "InformationSections": "gl-MarketGroupButton_Text",
+  "ResultadosCorretos": "gl-ParticipantCentered_Odds",
+  "IntervaloFinalJogoANDFirstGoalScorer": "gl-ParticipantBorderless_Odds",
+  "GolsExatosANDHalfTimeResult": "gl-Participant_Odds",
+  "GolsMaisMenos_ResultadosAmbosTimesMarcarem_MargemVitoria_TimeGols_ParaTimeMarcar_PrimeiroTimeMarcar": "gl-ParticipantOddsOnly_Odds"
+}

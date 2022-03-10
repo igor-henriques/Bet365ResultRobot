@@ -8,19 +8,17 @@
 
   <ItemGroup>
     <None Remove="Configurations\ConnectionStrings.json" />
-    <None Remove="JsonDependencies\ElementsXPath.json" />
-    <None Remove="JsonDependencies\User.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="JsonDependencies\ConnectionStrings.json">
+    <Content Include="Configurations\ElementsCSS.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="JsonDependencies\User.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Configurations\Settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="JsonDependencies\ElementsXPath.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Configurations\ElementsXPath.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
