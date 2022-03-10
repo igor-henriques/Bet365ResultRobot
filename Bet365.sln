@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4DB5C4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Robots", "Robots", "{88075D81-6BBF-4FF1-A27A-6563D53C4BA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainRobotOrchester", "WorldCupRobot\MainRobotOrchester.csproj", "{0F7C193C-01E2-4F50-9DEF-DDAE73B2E4AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainRobotOrchester", "WorldCupRobot\MainRobotOrchester.csproj", "{0F7C193C-01E2-4F50-9DEF-DDAE73B2E4AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonDriverExtensions", "CommonDriverExtensions\CommonDriverExtensions.csproj", "{3BC1589A-AC4F-4864-AE1C-1A622FAE7B0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDriverExtensions", "CommonDriverExtensions\CommonDriverExtensions.csproj", "{3BC1589A-AC4F-4864-AE1C-1A622FAE7B0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonUtils", "CommonUtils\CommonUtils.csproj", "{F7403774-7BFE-47B1-96E4-C3EC809E5EBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtils", "CommonUtils\CommonUtils.csproj", "{F7403774-7BFE-47B1-96E4-C3EC809E5EBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonDatabase", "CommonDatabase\CommonDatabase.csproj", "{9214983C-C7F0-448B-8FCC-1AD71143978E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDatabase", "CommonDatabase\CommonDatabase.csproj", "{9214983C-C7F0-448B-8FCC-1AD71143978E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
