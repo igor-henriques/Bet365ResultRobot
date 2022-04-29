@@ -7,11 +7,9 @@
 public interface IWorker
 {
     void StopDriver();
-    Task DoWorkAsync();
-    Task<bool> CheckEventTabAvailable();
+    Task DoWorkAsync(CancellationToken cancellationToken);
     Task ScrapAllEvents();
-    Task ScrapEvent(IWebElement element);
-    Task ResolveData(Odd odd, string nomeTimeVisitante, string nomeTimeCasa, string eventSchedule);
+    Task ScrapEvent(IWebElement element, int index);
     Task SetLastEventValue();
-    Task<bool> IsEventStarted();
+    Task<bool> IsEventStarted(IWebElement _event, int index);
 }

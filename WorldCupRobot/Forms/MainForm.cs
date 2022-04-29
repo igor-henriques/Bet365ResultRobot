@@ -3,31 +3,28 @@ namespace MainRobotOrchester.Forms;
 public partial class MainForm : Form
 {
     private readonly System.Threading.Timer RobotsVerifier;
-    private readonly System.Threading.Timer LogsCleaner;
-    private readonly EuroCupWorker euroCupWorker;
-    private readonly PremiershipWorker premiershipWorker;
-    private readonly SuperleagueWorker superleagueWorker;
+    private readonly System.Threading.Timer LogsCleaner;    
     private readonly WorldCupWorker worldCupWorker;
+    private readonly ClubesWorker clubesWorker;
+    private readonly ResultadosWorker resultadosWorker;
     private bool IsFormReady = false;
 
-    public static readonly List<string> eurocupLogs = new();
-    public static readonly List<string> premiershipLogs = new();
-    public static readonly List<string> superleagueLogs = new();
+    public static readonly List<string> clubesLogs = new();
     public static readonly List<string> worldcupLogs = new();
+    public static readonly List<string> resultadosLogs = new();
 
     private readonly Settings settings;
 
-    public MainForm(IHostedService euroCupWorker, Settings settings, IHostedService premiershipWorker, IHostedService superleagueWorker, IHostedService worldCupWorker)
+    public MainForm(IHostedService clubesWorker, IHostedService worldCupWorker, IHostedService resultadosWorker, Settings settings)
     {
         InitializeComponent();
 
         this.RobotsVerifier = new System.Threading.Timer(x => VerifyRobots(), null, 0, 1000);
         this.LogsCleaner = new System.Threading.Timer(x => CleanLogs(), null, settings.TimeToResetLogsInHours * 3_600_000, settings.TimeToResetLogsInHours * 3_600_000);
         this.settings = settings;
-        this.euroCupWorker = euroCupWorker as EuroCupWorker;
-        this.premiershipWorker = premiershipWorker as PremiershipWorker;
-        this.superleagueWorker = superleagueWorker as SuperleagueWorker;
         this.worldCupWorker = worldCupWorker as WorldCupWorker;
+        this.clubesWorker = clubesWorker as ClubesWorker;
+        this.resultadosWorker = clubesWorker as ResultadosWorker;
     }
 
     private void ChangeRobotStatusDescription(ToolStripStatusLabel statusElement, Color color, EStatusRobot status)
@@ -37,10 +34,9 @@ public partial class MainForm : Form
             {
                 try
                 {
-                    UpdateLog(rtbEurocupLog, eurocupLogs);
-                    UpdateLog(rtbPremiershipLog, premiershipLogs);
-                    UpdateLog(rtbSuperleagueLog, superleagueLogs);
+                    UpdateLog(rtbClubesLog, clubesLogs);
                     UpdateLog(rtbWorldcupLog, worldcupLogs);
+                    UpdateLog(rtbResultadosLog, resultadosLogs);
 
                     statusElement.ForeColor = color;
                     statusElement.Text = status.ToString();
@@ -67,83 +63,74 @@ public partial class MainForm : Form
 
     private void VerifyRobots()
     {
-        if (!EuroCupWorker.IsAlive)
+        try
         {
-            ChangeRobotStatusDescription(eurocupStatus, Color.DarkRed, EStatusRobot.ERROR);
-        }
-        else
-        {
-            ChangeRobotStatusDescription(eurocupStatus, Color.LimeGreen, EStatusRobot.OK);
-        }
+            if (!WorldCupWorker.IsAlive)
+            {
+                ChangeRobotStatusDescription(worldcupStatus, Color.DarkRed, EStatusRobot.ERROR);
+            }
+            else
+            {
+                ChangeRobotStatusDescription(worldcupStatus, Color.LimeGreen, EStatusRobot.OK);
+            }
 
-        if (!PremiershipWorker.IsAlive)
-        {
-            ChangeRobotStatusDescription(premiershipStatus, Color.DarkRed, EStatusRobot.ERROR);
-        }
-        else
-        {
-            ChangeRobotStatusDescription(premiershipStatus, Color.LimeGreen, EStatusRobot.OK);
-        }
+            if (!ClubesWorker.IsAlive)
+            {
+                ChangeRobotStatusDescription(clubesStatus, Color.DarkRed, EStatusRobot.ERROR);
+            }
+            else
+            {
+                ChangeRobotStatusDescription(clubesStatus, Color.LimeGreen, EStatusRobot.OK);
+            }
 
-        if (!SuperleagueWorker.IsAlive)
-        {
-            ChangeRobotStatusDescription(superleagueStatus, Color.DarkRed, EStatusRobot.ERROR);
+            if (!ResultadosWorker.IsAlive)
+            {
+                ChangeRobotStatusDescription(resultadosStatus, Color.DarkRed, EStatusRobot.ERROR);
+            }
+            else
+            {
+                ChangeRobotStatusDescription(resultadosStatus, Color.LimeGreen, EStatusRobot.OK);
+            }
         }
-        else
+        catch (Exception)
         {
-            ChangeRobotStatusDescription(superleagueStatus, Color.LimeGreen, EStatusRobot.OK);
-        }
-
-        if (!WorldCupWorker.IsAlive)
-        {
-            ChangeRobotStatusDescription(worldcupStatus, Color.DarkRed, EStatusRobot.ERROR);
-        }
-        else
-        {
-            ChangeRobotStatusDescription(worldcupStatus, Color.LimeGreen, EStatusRobot.OK);
+            throw;
         }
     }
 
     private void CleanLogs()
     {
-        this.BeginInvoke((MethodInvoker)delegate
-        {
-            try
+        if (IsFormReady)
+            this.BeginInvoke((MethodInvoker)delegate
             {
-                eurocupLogs.Clear(); rtbEurocupLog.Clear();
-                premiershipLogs.Clear(); rtbPremiershipLog.Clear();
-                superleagueLogs.Clear(); rtbSuperleagueLog.Clear();
-                worldcupLogs.Clear(); rtbWorldcupLog.Clear();
-            }
-            catch (Exception) { }
-        });
+                try
+                {
+                    clubesLogs.Clear(); rtbClubesLog.Clear();
+                    worldcupLogs.Clear(); rtbWorldcupLog.Clear();
+                    resultadosLogs.Clear(); rtbResultadosLog.Clear();
+                }
+                catch (Exception) { }
+            });
     }
 
-    public static async Task ResetRobot<T>(T robot) where T : BackgroundService, IWorker
+    public static async Task ResetRobot<T>(T robot) where T : BackgroundService
     {
-        robot.StopDriver();
-
         await robot.StartAsync(CancellationToken.None);
     }
 
-    private async void eurocupStatus_Click(object sender, EventArgs e)
+    private async void clubesStatus_Click(object sender, EventArgs e)
     {
-        await ResetRobot(euroCupWorker);
-    }
-
-    private async void premiershipStatus_Click(object sender, EventArgs e)
-    {
-        await ResetRobot(premiershipWorker);
-    }
-
-    private async void superleagueStatus_Click(object sender, EventArgs e)
-    {
-        await ResetRobot(superleagueWorker);
+        await ResetRobot(clubesWorker);
     }
 
     private async void worldcupStatus_Click(object sender, EventArgs e)
     {
         await ResetRobot(worldCupWorker);
+    }
+
+    private async void resultadosStatus_Click(object sender, EventArgs e)
+    {
+        await ResetRobot(resultadosWorker);
     }
 
     private void MainForm_Shown(object sender, EventArgs e)
@@ -169,10 +156,6 @@ public partial class MainForm : Form
             ConnectionString = Settings.ConnectionString,
             UserDefinedRandomTime = settings.UserDefinedRandomTime,
             TimeToResetLogsInHours = settings.TimeToResetLogsInHours,
-            WorldCupIdCompetition = settings.WorldCupIdCompetition,
-            EuroCupIdCompetition = settings.EuroCupIdCompetition,
-            SuperleagueIdCompetition = settings.SuperleagueIdCompetition,
-            PremiershipIdCompetition = settings.PremiershipIdCompetition,
             SecondsPausedEachIteration = settings.SecondsPausedEachIteration,
             IsDescritiveOperationsEnabled = settings.IsDescritiveOperationsEnabled,
         });
@@ -186,13 +169,11 @@ public partial class MainForm : Form
     {
         Action func = logsTabControl.SelectedTab.Text switch
         {
-            "Eurocup" => () => { eurocupLogs.Clear(); rtbEurocupLog.Clear(); }
-            ,
-            "Premiership" => () => { premiershipLogs.Clear(); rtbPremiershipLog.Clear(); }
-            ,
-            "Superleague" => () => { superleagueLogs.Clear(); rtbSuperleagueLog.Clear(); }
+            "Clubes" => () => { clubesLogs.Clear(); rtbClubesLog.Clear(); }
             ,
             "Worldcup" => () => { worldcupLogs.Clear(); rtbWorldcupLog.Clear(); }
+            ,
+            "Resultados" => () => { resultadosLogs.Clear(); rtbResultadosLog.Clear(); }
             ,
             _ => () => { }
         };
@@ -204,10 +185,9 @@ public partial class MainForm : Form
     {
         List<string> logs = logsTabControl.SelectedTab.Text switch
         {
-            "Eurocup" => eurocupLogs,
-            "Premiership" => premiershipLogs,
-            "Superleague" => superleagueLogs,
+            "Clubes" => clubesLogs,
             "Worldcup" => worldcupLogs,
+            "Resultados" => resultadosLogs,
             _ => new()
         };
 
@@ -218,7 +198,7 @@ public partial class MainForm : Form
 
     private void logsTabControl_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (logsTabControl.SelectedIndex == 4)
+        if (logsTabControl.SelectedIndex == 3)
         {
             btnExport.Enabled = false;
             btnLimpar.Enabled = false;

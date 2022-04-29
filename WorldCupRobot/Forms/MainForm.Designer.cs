@@ -31,23 +31,19 @@ partial class MainForm
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainRobotStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.eurocupStatusDescription = new System.Windows.Forms.ToolStripStatusLabel();
-            this.eurocupStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.premiershipStatusDescription = new System.Windows.Forms.ToolStripStatusLabel();
-            this.premiershipStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.superleagueStatusDescription = new System.Windows.Forms.ToolStripStatusLabel();
-            this.superleagueStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.clubesStatusDescription = new System.Windows.Forms.ToolStripStatusLabel();
+            this.clubesStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.worldcupStatusDescription = new System.Windows.Forms.ToolStripStatusLabel();
             this.worldcupStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.resultadosClubesDescription = new System.Windows.Forms.ToolStripStatusLabel();
+            this.resultadosStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.logsTabControl = new System.Windows.Forms.TabControl();
-            this.eurocupTab = new System.Windows.Forms.TabPage();
-            this.rtbEurocupLog = new System.Windows.Forms.RichTextBox();
-            this.premiershipTab = new System.Windows.Forms.TabPage();
-            this.rtbPremiershipLog = new System.Windows.Forms.RichTextBox();
-            this.superleagueTab = new System.Windows.Forms.TabPage();
-            this.rtbSuperleagueLog = new System.Windows.Forms.RichTextBox();
+            this.clubesTab = new System.Windows.Forms.TabPage();
+            this.rtbClubesLog = new System.Windows.Forms.RichTextBox();
             this.worldcupTab = new System.Windows.Forms.TabPage();
             this.rtbWorldcupLog = new System.Windows.Forms.RichTextBox();
+            this.resultadosTab = new System.Windows.Forms.TabPage();
+            this.rtbResultadosLog = new System.Windows.Forms.RichTextBox();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.cbOperacaoDescritiva = new System.Windows.Forms.CheckBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -65,10 +61,9 @@ partial class MainForm
             this.btnExport = new System.Windows.Forms.Button();
             this.mainRobotStatusStrip.SuspendLayout();
             this.logsTabControl.SuspendLayout();
-            this.eurocupTab.SuspendLayout();
-            this.premiershipTab.SuspendLayout();
-            this.superleagueTab.SuspendLayout();
+            this.clubesTab.SuspendLayout();
             this.worldcupTab.SuspendLayout();
+            this.resultadosTab.SuspendLayout();
             this.settingsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -79,67 +74,33 @@ partial class MainForm
             // 
             this.mainRobotStatusStrip.BackColor = System.Drawing.Color.White;
             this.mainRobotStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.eurocupStatusDescription,
-            this.eurocupStatus,
-            this.premiershipStatusDescription,
-            this.premiershipStatus,
-            this.superleagueStatusDescription,
-            this.superleagueStatus,
+            this.clubesStatusDescription,
+            this.clubesStatus,
             this.worldcupStatusDescription,
-            this.worldcupStatus});
+            this.worldcupStatus,
+            this.resultadosClubesDescription,
+            this.resultadosStatus});
             this.mainRobotStatusStrip.Location = new System.Drawing.Point(0, 428);
             this.mainRobotStatusStrip.Name = "mainRobotStatusStrip";
             this.mainRobotStatusStrip.Size = new System.Drawing.Size(654, 22);
             this.mainRobotStatusStrip.TabIndex = 2;
             this.mainRobotStatusStrip.Text = "mainRobotStatusStrip";
             // 
-            // eurocupStatusDescription
+            // clubesStatusDescription
             // 
-            this.eurocupStatusDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.eurocupStatusDescription.Name = "eurocupStatusDescription";
-            this.eurocupStatusDescription.Size = new System.Drawing.Size(89, 17);
-            this.eurocupStatusDescription.Text = "Eurocup Robot";
+            this.clubesStatusDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.clubesStatusDescription.Name = "clubesStatusDescription";
+            this.clubesStatusDescription.Size = new System.Drawing.Size(80, 17);
+            this.clubesStatusDescription.Text = "Clubes Robot";
             // 
-            // eurocupStatus
+            // clubesStatus
             // 
-            this.eurocupStatus.ForeColor = System.Drawing.Color.Orange;
-            this.eurocupStatus.Name = "eurocupStatus";
-            this.eurocupStatus.Size = new System.Drawing.Size(57, 17);
-            this.eurocupStatus.Text = "PENDING";
-            this.eurocupStatus.ToolTipText = "Clique para reiniciar o robô, caso necessário";
-            this.eurocupStatus.Click += new System.EventHandler(this.eurocupStatus_Click);
-            // 
-            // premiershipStatusDescription
-            // 
-            this.premiershipStatusDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.premiershipStatusDescription.Name = "premiershipStatusDescription";
-            this.premiershipStatusDescription.Size = new System.Drawing.Size(111, 17);
-            this.premiershipStatusDescription.Text = "Premiership Robot";
-            // 
-            // premiershipStatus
-            // 
-            this.premiershipStatus.ForeColor = System.Drawing.Color.Orange;
-            this.premiershipStatus.Name = "premiershipStatus";
-            this.premiershipStatus.Size = new System.Drawing.Size(57, 17);
-            this.premiershipStatus.Text = "PENDING";
-            this.premiershipStatus.ToolTipText = "Clique para reiniciar o robô, caso necessário";
-            this.premiershipStatus.Click += new System.EventHandler(this.premiershipStatus_Click);
-            // 
-            // superleagueStatusDescription
-            // 
-            this.superleagueStatusDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.superleagueStatusDescription.Name = "superleagueStatusDescription";
-            this.superleagueStatusDescription.Size = new System.Drawing.Size(114, 17);
-            this.superleagueStatusDescription.Text = "Superleague Robot";
-            // 
-            // superleagueStatus
-            // 
-            this.superleagueStatus.ForeColor = System.Drawing.Color.Orange;
-            this.superleagueStatus.Name = "superleagueStatus";
-            this.superleagueStatus.Size = new System.Drawing.Size(57, 17);
-            this.superleagueStatus.Text = "PENDING";
-            this.superleagueStatus.ToolTipText = "Clique para reiniciar o robô, caso necessário";
-            this.superleagueStatus.Click += new System.EventHandler(this.superleagueStatus_Click);
+            this.clubesStatus.ForeColor = System.Drawing.Color.Orange;
+            this.clubesStatus.Name = "clubesStatus";
+            this.clubesStatus.Size = new System.Drawing.Size(57, 17);
+            this.clubesStatus.Text = "PENDING";
+            this.clubesStatus.ToolTipText = "Clique para reiniciar o robô, caso necessário";
+            this.clubesStatus.Click += new System.EventHandler(this.clubesStatus_Click);
             // 
             // worldcupStatusDescription
             // 
@@ -157,15 +118,28 @@ partial class MainForm
             this.worldcupStatus.ToolTipText = "Clique para reiniciar o robô, caso necessário";
             this.worldcupStatus.Click += new System.EventHandler(this.worldcupStatus_Click);
             // 
+            // resultadosClubesDescription
+            // 
+            this.resultadosClubesDescription.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.resultadosClubesDescription.Name = "resultadosClubesDescription";
+            this.resultadosClubesDescription.Size = new System.Drawing.Size(104, 17);
+            this.resultadosClubesDescription.Text = "Resultados Robot";
+            // 
+            // resultadosStatus
+            // 
+            this.resultadosStatus.ForeColor = System.Drawing.Color.Orange;
+            this.resultadosStatus.Name = "resultadosStatus";
+            this.resultadosStatus.Size = new System.Drawing.Size(57, 17);
+            this.resultadosStatus.Text = "PENDING";
+            // 
             // logsTabControl
             // 
             this.logsTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.logsTabControl.Controls.Add(this.eurocupTab);
-            this.logsTabControl.Controls.Add(this.premiershipTab);
-            this.logsTabControl.Controls.Add(this.superleagueTab);
+            this.logsTabControl.Controls.Add(this.clubesTab);
             this.logsTabControl.Controls.Add(this.worldcupTab);
+            this.logsTabControl.Controls.Add(this.resultadosTab);
             this.logsTabControl.Controls.Add(this.settingsTab);
             this.logsTabControl.Location = new System.Drawing.Point(0, 0);
             this.logsTabControl.Name = "logsTabControl";
@@ -174,65 +148,25 @@ partial class MainForm
             this.logsTabControl.TabIndex = 4;
             this.logsTabControl.SelectedIndexChanged += new System.EventHandler(this.logsTabControl_SelectedIndexChanged);
             // 
-            // eurocupTab
+            // clubesTab
             // 
-            this.eurocupTab.Controls.Add(this.rtbEurocupLog);
-            this.eurocupTab.Location = new System.Drawing.Point(4, 24);
-            this.eurocupTab.Name = "eurocupTab";
-            this.eurocupTab.Padding = new System.Windows.Forms.Padding(3);
-            this.eurocupTab.Size = new System.Drawing.Size(646, 325);
-            this.eurocupTab.TabIndex = 0;
-            this.eurocupTab.Text = "Eurocup";
-            this.eurocupTab.UseVisualStyleBackColor = true;
+            this.clubesTab.Controls.Add(this.rtbClubesLog);
+            this.clubesTab.Location = new System.Drawing.Point(4, 24);
+            this.clubesTab.Name = "clubesTab";
+            this.clubesTab.Padding = new System.Windows.Forms.Padding(3);
+            this.clubesTab.Size = new System.Drawing.Size(646, 325);
+            this.clubesTab.TabIndex = 0;
+            this.clubesTab.Text = "Clubes";
+            this.clubesTab.UseVisualStyleBackColor = true;
             // 
-            // rtbEurocupLog
+            // rtbClubesLog
             // 
-            this.rtbEurocupLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbEurocupLog.Location = new System.Drawing.Point(3, 3);
-            this.rtbEurocupLog.Name = "rtbEurocupLog";
-            this.rtbEurocupLog.Size = new System.Drawing.Size(640, 319);
-            this.rtbEurocupLog.TabIndex = 7;
-            this.rtbEurocupLog.Text = "";
-            // 
-            // premiershipTab
-            // 
-            this.premiershipTab.Controls.Add(this.rtbPremiershipLog);
-            this.premiershipTab.Location = new System.Drawing.Point(4, 24);
-            this.premiershipTab.Name = "premiershipTab";
-            this.premiershipTab.Padding = new System.Windows.Forms.Padding(3);
-            this.premiershipTab.Size = new System.Drawing.Size(646, 325);
-            this.premiershipTab.TabIndex = 1;
-            this.premiershipTab.Text = "Premiership";
-            this.premiershipTab.UseVisualStyleBackColor = true;
-            // 
-            // rtbPremiershipLog
-            // 
-            this.rtbPremiershipLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbPremiershipLog.Location = new System.Drawing.Point(3, 3);
-            this.rtbPremiershipLog.Name = "rtbPremiershipLog";
-            this.rtbPremiershipLog.Size = new System.Drawing.Size(640, 319);
-            this.rtbPremiershipLog.TabIndex = 5;
-            this.rtbPremiershipLog.Text = "";
-            // 
-            // superleagueTab
-            // 
-            this.superleagueTab.Controls.Add(this.rtbSuperleagueLog);
-            this.superleagueTab.Location = new System.Drawing.Point(4, 24);
-            this.superleagueTab.Name = "superleagueTab";
-            this.superleagueTab.Padding = new System.Windows.Forms.Padding(3);
-            this.superleagueTab.Size = new System.Drawing.Size(646, 325);
-            this.superleagueTab.TabIndex = 2;
-            this.superleagueTab.Text = "Superleague";
-            this.superleagueTab.UseVisualStyleBackColor = true;
-            // 
-            // rtbSuperleagueLog
-            // 
-            this.rtbSuperleagueLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbSuperleagueLog.Location = new System.Drawing.Point(3, 3);
-            this.rtbSuperleagueLog.Name = "rtbSuperleagueLog";
-            this.rtbSuperleagueLog.Size = new System.Drawing.Size(640, 319);
-            this.rtbSuperleagueLog.TabIndex = 5;
-            this.rtbSuperleagueLog.Text = "";
+            this.rtbClubesLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbClubesLog.Location = new System.Drawing.Point(3, 3);
+            this.rtbClubesLog.Name = "rtbClubesLog";
+            this.rtbClubesLog.Size = new System.Drawing.Size(640, 319);
+            this.rtbClubesLog.TabIndex = 7;
+            this.rtbClubesLog.Text = "";
             // 
             // worldcupTab
             // 
@@ -253,6 +187,25 @@ partial class MainForm
             this.rtbWorldcupLog.Size = new System.Drawing.Size(640, 319);
             this.rtbWorldcupLog.TabIndex = 5;
             this.rtbWorldcupLog.Text = "";
+            // 
+            // resultadosTab
+            // 
+            this.resultadosTab.Controls.Add(this.rtbResultadosLog);
+            this.resultadosTab.Location = new System.Drawing.Point(4, 24);
+            this.resultadosTab.Name = "resultadosTab";
+            this.resultadosTab.Size = new System.Drawing.Size(646, 325);
+            this.resultadosTab.TabIndex = 5;
+            this.resultadosTab.Text = "Resultados";
+            this.resultadosTab.UseVisualStyleBackColor = true;
+            // 
+            // rtbResultadosLog
+            // 
+            this.rtbResultadosLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbResultadosLog.Location = new System.Drawing.Point(0, 0);
+            this.rtbResultadosLog.Name = "rtbResultadosLog";
+            this.rtbResultadosLog.Size = new System.Drawing.Size(646, 325);
+            this.rtbResultadosLog.TabIndex = 8;
+            this.rtbResultadosLog.Text = "";
             // 
             // settingsTab
             // 
@@ -365,7 +318,6 @@ partial class MainForm
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Enabled = false;
             this.pictureBox1.Location = new System.Drawing.Point(299, 30);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(57, 1);
@@ -374,9 +326,8 @@ partial class MainForm
             // 
             // label1
             // 
-            this.label1.Enabled = false;
             this.label1.Font = new System.Drawing.Font("Malgun Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label1.Location = new System.Drawing.Point(10, 11);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(283, 21);
@@ -388,7 +339,6 @@ partial class MainForm
             // 
             this.tbRandomTime.BackColor = System.Drawing.SystemColors.Control;
             this.tbRandomTime.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbRandomTime.Enabled = false;
             this.tbRandomTime.Font = new System.Drawing.Font("Malgun Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbRandomTime.Location = new System.Drawing.Point(299, 12);
             this.tbRandomTime.Name = "tbRandomTime";
@@ -440,10 +390,9 @@ partial class MainForm
             this.mainRobotStatusStrip.ResumeLayout(false);
             this.mainRobotStatusStrip.PerformLayout();
             this.logsTabControl.ResumeLayout(false);
-            this.eurocupTab.ResumeLayout(false);
-            this.premiershipTab.ResumeLayout(false);
-            this.superleagueTab.ResumeLayout(false);
+            this.clubesTab.ResumeLayout(false);
             this.worldcupTab.ResumeLayout(false);
+            this.resultadosTab.ResumeLayout(false);
             this.settingsTab.ResumeLayout(false);
             this.settingsTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -457,19 +406,11 @@ partial class MainForm
     #endregion
 
     private StatusStrip mainRobotStatusStrip;
-    private ToolStripStatusLabel eurocupStatusDescription;
-    private ToolStripStatusLabel eurocupStatus;
-    private ToolStripStatusLabel premiershipStatusDescription;
-    private ToolStripStatusLabel premiershipStatus;
-    private ToolStripStatusLabel superleagueStatusDescription;
-    private ToolStripStatusLabel superleagueStatus;
+    private ToolStripStatusLabel clubesStatusDescription;
+    private ToolStripStatusLabel clubesStatus;
     private ToolStripStatusLabel worldcupStatusDescription;
     private ToolStripStatusLabel worldcupStatus;
     private TabControl logsTabControl;
-    private TabPage premiershipTab;
-    private RichTextBox rtbPremiershipLog;
-    private TabPage superleagueTab;
-    private RichTextBox rtbSuperleagueLog;
     private TabPage worldcupTab;
     private RichTextBox rtbWorldcupLog;
     private ToolTip toolTip;
@@ -478,8 +419,8 @@ partial class MainForm
     private PictureBox pictureBox1;
     private Label label1;
     private TextBox tbRandomTime;
-    private TabPage eurocupTab;
-    private RichTextBox rtbEurocupLog;
+    private TabPage clubesTab;
+    private RichTextBox rtbClubesLog;
     private Button btnLimpar;
     private Button btnExport;
     private PictureBox pictureBox2;
@@ -489,4 +430,8 @@ partial class MainForm
     private Label label3;
     private TextBox tbIterationInterval;
     private CheckBox cbOperacaoDescritiva;
+    private TabPage resultadosTab;
+    private RichTextBox rtbResultadosLog;
+    private ToolStripStatusLabel resultadosClubesDescription;
+    private ToolStripStatusLabel resultadosStatus;
 }

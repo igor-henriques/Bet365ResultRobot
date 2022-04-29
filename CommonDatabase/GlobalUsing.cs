@@ -5,3 +5,6 @@ global using CommonUtils.Configurations;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 global using System.Text;
+global using CommonDatabase.Enums;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.ComponentModel.DataAnnotations;

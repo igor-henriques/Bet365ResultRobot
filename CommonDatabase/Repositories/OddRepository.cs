@@ -2,23 +2,42 @@
 
 public class OddRepository : IOddRepository
 {
-    private readonly Bet365RobotContext context;
+    private readonly BetfairDataContext dataContext;
 
-    public OddRepository(Bet365RobotContext context)
+    public OddRepository(BetfairDataContext dataContext)
     {
-        this.context = context;
+        this.dataContext = dataContext;
     }
 
-    public async Task<Odd> InsertAsync(Odd odd)
+    public async ValueTask<Odd> AddAsync(Odd odd)
     {
-        context.Add(odd);
-        await SaveChangesAsync();
+        if (odd.Id != default(long))
+            return null;
+                
+        if (!await DataAlreadyExists(odd))
+        {
+            dataContext.Odd.Add(odd);
 
-        return odd;
+            await dataContext.SaveChangesAsync();
+
+            return odd;
+        }        
+
+        return null;
     }
 
-    public async Task SaveChangesAsync()
+    public async ValueTask<bool> DataAlreadyExists(Odd odd)
     {
-        await context.SaveChangesAsync();
+        var dataAlreadyExists = await dataContext.Odd
+            .Where(o =>
+                o.DataInicio == odd.DataInicio &
+                o.NomeTimeCasa == odd.NomeTimeCasa &
+                o.NomeTimeVisitante == odd.NomeTimeVisitante &
+                o.ProbabilidadeEmpate == odd.ProbabilidadeEmpate &
+                o.ProbabilidadeVitoriaTimeVisitante == odd.ProbabilidadeVitoriaTimeVisitante &
+                o.ProbabilidadeVitoriaTimeCasa == odd.ProbabilidadeVitoriaTimeCasa)
+            .AnyAsync();
+
+        return dataAlreadyExists;
     }
 }

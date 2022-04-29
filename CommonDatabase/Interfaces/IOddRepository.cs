@@ -1,7 +1,7 @@
-﻿namespace CommonDatabase.Interfaces;
+﻿
+namespace CommonDatabase.Interfaces;
 
 public interface IOddRepository
 {
-    Task<Odd> InsertAsync(Odd odd);
-    Task SaveChangesAsync();
+    ValueTask<Odd> AddAsync(Odd odd);
 }

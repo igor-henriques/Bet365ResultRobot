@@ -25,42 +25,33 @@ options.AddArguments(new List<string>()
     "--start-maximized"
 });
 
-string connectionString = Settings.ConnectionString;
+options.AddExcludedArgument("enable-automation");
+options.AddAdditionalOption("useAutomationExtension", false);
+
+options.AddExtension(Path.Combine(Environment.CurrentDirectory, "cookie-notice-block.crx"));
 
 await Host.CreateDefaultBuilder()
     .ConfigureServices(services =>
     {
         services.ConfigureSettings();
-        services.ConfigureElementsXPathInjection();
-        services.ConfigureElementsCSSInjection();
 
-        services.AddDbContext<Bet365RobotContext>(options =>
+        services.AddDbContext<BetfairDataContext>(options =>
         {
-            options.UseSqlServer(connectionString);
+            options.UseSqlServer(Settings.ConnectionString);
         }, ServiceLifetime.Transient);
 
         services.AddSingleton<MainForm>();
         services.AddTransient<IOddRepository, OddRepository>();
-        services.AddTransient<ITeamRepository, TeamRepository>();
-        services.AddTransient<IMatchNextRepository, MatchNextRepository>();
+        services.AddTransient<IResultadoRepository, ResultadoRepository>();
 
         services.AddTransient<ChromeDriver>(provider => new ChromeDriver(driverService, options));
-        services.AddTransient<IWebRepository, WebRepository>();
+        services.AddTransient<IWebRepository, WebRepository>();        
+
+        services.AddHostedService<ClubesWorker>();
+        services.AddHostedService<WorldCupWorker>();
+        services.AddHostedService<ResultadosWorker>();
 
         services.AddHostedService<StartForm>();
-
-        services.AddHostedService<EuroCupWorker>();
-        services.AddHostedService<PremiershipWorker>();
-        services.AddHostedService<SuperleagueWorker>();
-        services.AddHostedService<WorldCupWorker>();
-
-        services.AddLogging(builder =>
-        {
-            builder.AddFilter("Microsoft", Microsoft.Extensions.Logging.LogLevel.Warning)
-                   .AddFilter("System", Microsoft.Extensions.Logging.LogLevel.Warning)
-                   .AddFilter("NToastNotify", Microsoft.Extensions.Logging.LogLevel.Warning)
-                   .AddConsole();
-        });
     })
     .Build()
     .RunAsync();

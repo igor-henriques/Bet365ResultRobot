@@ -1,207 +1,199 @@
 ﻿namespace MainRobotOrchester.Workers;
 
-public class WorldCupWorker : BackgroundService, IWorker
+internal class WorldCupWorker : BackgroundService, IWorker
 {
     public static bool IsAlive = false;
 
-    private readonly IWebRepository webRepository;
+    private readonly Random random = new Random();
     private readonly ILogger<WorldCupWorker> logger;
-    private readonly ElementsXPath elementsXPath;
-    private readonly ElementsCSS elementsCSS;
+    private readonly IOddRepository oddContext;
     private readonly Settings settings;
-    private readonly IOddRepository oddRepository;
-    private readonly ITeamRepository teamRepository;
-    private readonly IMatchNextRepository matchNextRepository;
+    private readonly IWebRepository webContext;
     private string lastEventText = string.Empty;
-    private readonly OddBuilder<WorldCupWorker> oddBuilder;
+    private readonly ElementsLocators locators;
 
-    public WorldCupWorker(IWebRepository webRepository, ILogger<WorldCupWorker> logger, ElementsXPath elementsXPath,
-        ElementsCSS elementsCSS, Settings settings, IOddRepository oddRepository, ITeamRepository teamRepository, IMatchNextRepository matchNextRepository)
+    public WorldCupWorker(ILogger<WorldCupWorker> logger, IOddRepository oddContext,
+        Settings settings, IWebRepository webContext, ElementsLocators locators)
     {
-        this.webRepository = webRepository;
         this.logger = logger;
-        this.elementsXPath = elementsXPath;
-        this.elementsCSS = elementsCSS;
+        this.oddContext = oddContext;
         this.settings = settings;
-        this.oddRepository = oddRepository;
-        this.teamRepository = teamRepository;
-        this.matchNextRepository = matchNextRepository;
-        this.oddBuilder = new OddBuilder<WorldCupWorker>(webRepository, settings, elementsXPath, elementsCSS, logger);
+        this.webContext = webContext;
+        this.locators = locators;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    public async Task DoWorkAsync(CancellationToken stoppingToken)
     {
+        await Task.Delay(2000);
+
+        await ScrapAllEvents();
+
+        await Task.Delay(TimeSpan.FromSeconds(settings.UserDefinedRandomTime + random.Next(1, 3)));
+
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                IsAlive = true;
+                webContext.Refresh();
 
-                await DoWorkAsync();
+                await Task.Delay(1000);
+
+                var lastEvent = await ClickAndGetLastEvent();
+
+                if (lastEvent.Item1.Text != lastEventText)
+                {
+                    await ScrapEvent(lastEvent.Item1, lastEvent.Item2 - 1);
+                    lastEventText = lastEvent.Item1.Text;
+                }
             }
             catch (Exception e)
             {
-                IsAlive = false;
-
-                logger.UILogInformation(e.ToString(), Microsoft.Extensions.Logging.LogLevel.Critical);
-
-                webRepository.Refresh();
-
-                await DoWorkAsync();
+                UILogger.UILogInformation(logger, e.ToString(), Microsoft.Extensions.Logging.LogLevel.Critical);
             }
 
-            logger.UILogInformation($"Pausando por {settings.SecondsPausedEachIteration} segundos antes da próxima iteração");
-
-            await Task.Delay(TimeSpan.FromSeconds(settings.SecondsPausedEachIteration));
+            await Task.Delay(TimeSpan.FromSeconds(settings.UserDefinedRandomTime + random.Next(1, 3)));
         }
     }
 
-    public async Task DoWorkAsync()
+    public async Task<(IWebElement, int)> ClickAndGetLastEvent()
     {
-        if (!webRepository.GetCurrentURL().Equals(elementsXPath.VirtualFutebolURL))
+        var slide = await webContext.GetElement(By.XPath(locators.DatesSliderXPath));
+
+        var events = slide.FindElements(By.TagName("span"));
+
+        var lastEventOnWeb = events.LastOrDefault();
+
+        while (!lastEventOnWeb.Displayed)
         {
-            webRepository.Navigate(elementsXPath.VirtualFutebolURL);
-            await webRepository.ClickOnElement(By.XPath(elementsXPath.WorldcupElements.BrowserTabPath));
+            await webContext.ClickOnElement(By.XPath(locators.SlideRightArrow));
+
+            await Task.Delay(100);
         }
 
-        while (!await CheckEventTabAvailable())
-            await webRepository.ClickOnElement(By.XPath(elementsXPath.WorldcupElements.BrowserTabPath), false);
+        lastEventOnWeb.Click();
 
-        if (!lastEventText.Any())
-        {
-            await ScrapAllEvents();
-
-            await SetLastEventValue();
-        }
-        else
-        {
-            var lastEventScrapped = await webRepository.GetLastEvent(By.ClassName(elementsCSS.EventTab));
-
-            if (lastEventScrapped.Text != lastEventText)
-            {
-                lastEventText = lastEventScrapped.Text;
-
-                await ScrapEvent(lastEventScrapped);
-            }
-        }
-
-        logger.UILogInformation("Iteração finalizada");
+        return (lastEventOnWeb, events.Count);
     }
 
-    public void StopDriver()
+    public async Task<bool> IsEventStarted(IWebElement _event, int eventIndex)
     {
-        webRepository.StopDriver();
+        try
+        {
+            var dateNow = $"{DateTime.Now.Hour}:{DateTime.Now.Minute}";
+
+            if (_event.Text.Equals(dateNow))
+                return true;
+
+            var eventStartedSpan = await webContext.GetElement(By.XPath(string.Format(locators.AoVivoDescriptionCopaMundoXPath, eventIndex + 1)), false);
+
+            if (eventStartedSpan.Displayed)
+                return true;
+
+            return false;
+        }
+        catch (Exception)
+        {
+            return true;
+        }
     }
 
-    public async Task<bool> CheckEventTabAvailable()
+    public Task ResolveData(Odd odd, string nomeTimeVisitante, string nomeTimeCasa, string eventSchedule)
     {
-        var element = await webRepository.GetElements(By.XPath(elementsXPath.Events.BrowserTabContent), false);
-
-        return element.Count > 0;
+        throw new NotImplementedException();
     }
 
     public async Task ScrapAllEvents()
     {
-        var eventsProperties = elementsXPath.Events.GetType().GetProperties();
-
-        for (int i = 1; i < eventsProperties.Length; i++)
-        {
-            //Quando tem evento iniciado, há somente 6 Events pra analisar, em vez de 7, então break para não entrar no 7º Event
-            if (i == eventsProperties.Length - 1 && !await IsEventStarted()) break;
-
-            var currentEventValue = eventsProperties[i].GetValue(elementsXPath.Events).ToString();
-
-            while (!await CheckEventTabAvailable())
-                await webRepository.ClickOnElement(By.XPath(elementsXPath.WorldcupElements.BrowserTabPath));
-
-            if (i == 1 & await IsEventStarted()) continue;
-
-            await ScrapEvent(await webRepository.GetElement(By.XPath(currentEventValue)));
-        }
-    }
-    public async Task ScrapEvent(IWebElement element)
-    {
         try
         {
-            element?.Click();
+            if (!webContext.GetCurrentURL().Equals(locators.MainURL + locators.WorldcupSubURL))
+            {
+                webContext.Navigate(locators.MainURL + locators.WorldcupSubURL);
 
-            await Task.Delay(500);
+                await Task.Delay(500);
+            }
 
-            var eventSchedule = await webRepository.GetElementContent(By.ClassName(elementsCSS.SelectedEvent));
-            var nomeTimeCasa = await webRepository.GetElementContent(By.XPath(elementsXPath.NomeTimeCasa));
-            var nomeTimeVisitante = await webRepository.GetElementContent(By.XPath(elementsXPath.NomeTimeVisitante));
+            var slide = await webContext.GetElement(By.XPath(locators.DatesSliderXPath));
 
-            logger.UILogInformation($"Extraindo dados do evento {eventSchedule} - {nomeTimeCasa} vs {nomeTimeVisitante}");
+            var events = slide.FindElements(By.TagName("span"));
 
-            var odd = await oddBuilder.BuildOddAsync();
+            foreach (var model in events.Select((currentEvent, index) => (currentEvent, index)))
+            {
+                while (await IsEventStarted(model.currentEvent, model.index))
+                {
+                    await Task.Delay(5000);
 
-            await ResolveData(odd, nomeTimeVisitante, nomeTimeCasa, eventSchedule);
+                    webContext.Refresh();
+
+                    await ScrapAllEvents();
+
+                    return;
+                }
+
+                while (!model.currentEvent.Displayed)
+                    await webContext.ClickOnElement(By.XPath(locators.SlideRightArrow));
+
+                model.currentEvent.Click();
+
+                await Task.Delay(1000);
+
+                await ScrapEvent(model.currentEvent, model.index);
+
+                if (model.index == events.Count - 1)
+                    lastEventText = model.currentEvent.Text;
+            }
         }
         catch (Exception e)
         {
-            logger.UILogInformation(e.ToString());
+            UILogger.UILogInformation(logger, e.ToString(), Microsoft.Extensions.Logging.LogLevel.Critical);
+
+            webContext.Refresh();
+
+            await ScrapAllEvents();
         }
     }
 
-    public async Task ResolveData(Odd odd, string nomeTimeVisitante, string nomeTimeCasa, string eventSchedule)
+    public async Task ScrapEvent(IWebElement element, int index)
     {
-        if (odd != null)
-        {
-            var splittedEventSchedule = eventSchedule.Split(':');
+        var oddBuilder = new OddBuilder<WorldCupWorker>(webContext, locators, logger);
 
-            var matchDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.UtcNow.Day, DateTime.UtcNow.Hour, int.Parse(splittedEventSchedule[1]), 0);
+        var odd = await oddBuilder.BuildOddAsync(element, index);
 
-            odd.IdTeamAway = (await teamRepository.GetByNameAsync(nomeTimeVisitante)).Id;
-            odd.IdTeamHome = (await teamRepository.GetByNameAsync(nomeTimeCasa)).Id;
+        if (odd is null)
+            return;
 
-            MatchNext matchNext = new()
-            {
-                IdCompetition = settings.WorldCupIdCompetition,
-                IsStarted = await IsEventStarted(),
-                TimeCasa = nomeTimeCasa,
-                TimeVisitante = nomeTimeVisitante,
-                IdTeamHome = odd.IdTeamHome,
-                IdTeamAway = odd.IdTeamAway,
-                Date = matchDate,
-                DataInicioJogo = DateTime.Parse("1900-01-01 00:00:00.000"),
-                Tempo = eventSchedule,
-                UserDate = matchDate.AddHours(-3),
-                SendTelegramConfrontos = false
-            };
+        await SaveOddAsync(odd);
+    }
 
-            await matchNextRepository.InsertAsync(matchNext);
+    public async Task SaveOddAsync(Odd odd)
+    {
+        var response = await oddContext.AddAsync(odd);
 
-            odd.IdMatchNext = (int)matchNext.Id;
-
-            await oddRepository.InsertAsync(odd);
-
-            if (settings.IsDescritiveOperationsEnabled)
-            {
-                logger.UILogInformation($"Odd ID {odd.Id} adicionado ao banco de dados.");
-                logger.UILogInformation($"Match ID {matchNext.Id} adicionado ao banco de dados.");
-            }
-        }
+        if (response != null)
+            UILogger.UILogInformation(logger, $"Odd {response.NomeTimeCasa} vs {response.NomeTimeVisitante}({response.DataInicio.Hour.ToString("00")}:{response.DataInicio.Minute.ToString("00")}) salva no banco de dados - ID: {response.Id}");
     }
 
     public async Task SetLastEventValue()
     {
-        this.lastEventText = (await webRepository.GetLastEvent(By.ClassName(elementsCSS.EventTab))).Text;
+        var slide = await webContext.GetElement(By.XPath(locators.DatesSliderXPath));
+
+        var events = slide.FindElements(By.TagName("span"));
+
+        var lastEventOnWeb = events.LastOrDefault()?.Text;
+
+        if (lastEventText != lastEventOnWeb)
+            this.lastEventText = lastEventOnWeb;
     }
 
-    public async Task<bool> IsEventStarted()
+    public void StopDriver()
     {
-        var elements = await webRepository.GetElements(By.ClassName(elementsCSS.EventTab));
-        var counter = await webRepository.GetElementContent(By.XPath(elementsXPath.CounterGameStop), false);
+        webContext.StopDriver();
+    }
 
-        if (counter?.Length > 0)
-        {
-            var timeSpan = TimeSpan.FromSeconds(int.Parse(counter.Split(':')[0]) * 60 + int.Parse(counter.Split(':')[1])).TotalSeconds;
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        IsAlive = true;
 
-            return elements.Count() == 7 | timeSpan <= 2;
-        }
-        else
-        {
-            return elements.Count() == 7;
-        }
+        await DoWorkAsync(stoppingToken);
     }
 }

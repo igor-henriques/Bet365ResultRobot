@@ -12,4 +12,10 @@
 	  <PackageReference Include="Selenium.Support" Version="4.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="cookie-notice-block.crx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

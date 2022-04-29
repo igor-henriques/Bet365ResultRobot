@@ -6,17 +6,29 @@ public class CleanDriverGarbage
     {
         foreach (Process instance in Process.GetProcessesByName("chrome"))
         {
-            instance.Kill();
+            try
+            {
+                instance.Kill();
+            }
+            catch (Exception) { }            
         }
 
         foreach (Process instance in Process.GetProcessesByName("chromedriver"))
         {
-            instance.Kill();
+            try
+            {
+                instance.Kill();
+            }
+            catch (Exception) { }
         }
 
         foreach (Process instance in Process.GetProcessesByName("conhost"))
         {
-            instance.Kill();
+            try
+            {
+                instance.Kill();
+            }
+            catch (Exception) { }
         }
     }
 }

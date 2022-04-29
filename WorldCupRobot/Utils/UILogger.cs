@@ -12,10 +12,9 @@ public static class UILogger
 
             var list = workerName switch
             {
-                "EUROCUP" => MainForm.eurocupLogs,
-                "PREMIERSHIP" => MainForm.premiershipLogs,
-                "SUPERLEAGUE" => MainForm.superleagueLogs,
+                "CLUBES" => MainForm.clubesLogs,
                 "WORLDCUP" => MainForm.worldcupLogs,
+                "RESULTADOS" => MainForm.resultadosLogs,
                 _ => new List<string>()
             };
 

@@ -1,4 +1,6 @@
-﻿namespace CommonDriverExtensions.Repositories;
+﻿using SeleniumExtras.WaitHelpers;
+
+namespace CommonDriverExtensions.Repositories;
 
 public class WebRepository : IWebRepository
 {
@@ -10,7 +12,7 @@ public class WebRepository : IWebRepository
     {
         this._driver = driver;
 
-        this._wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(15));
+        this._wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
 
         this._wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(ElementNotVisibleException));
     }
@@ -28,7 +30,7 @@ public class WebRepository : IWebRepository
     public async ValueTask<IWebElement> GetElement(By elementLocator, bool verifyExistence = true)
     {
         if (verifyExistence)
-            await WaitUntilElementExists(elementLocator);
+            WaitUntilElementExists(elementLocator);
 
         return await ValueTask.FromResult(_driver.FindElement(elementLocator));
     }
@@ -43,7 +45,7 @@ public class WebRepository : IWebRepository
     public async ValueTask<IReadOnlyCollection<IWebElement>> GetElements(By elementLocator, bool verifyExistence = true)
     {
         if (verifyExistence)
-            await WaitUntilElementExists(elementLocator);
+            WaitUntilElementExists(elementLocator);
 
         return await ValueTask.FromResult(_driver.FindElements(elementLocator));
     }
@@ -52,12 +54,15 @@ public class WebRepository : IWebRepository
     {
         var element = await GetElement(elementLocator, verifyExistence);
 
-        return await ValueTask.FromResult(element.Text);
+        return await ValueTask.FromResult(element?.Text);
     }
 
     public async ValueTask ClickOnElement(By elementLocator, bool verifyExistence = true)
     {
         var element = await GetElement(elementLocator, verifyExistence);
+
+        while (!element.Displayed | !element.Enabled)
+            await Task.Delay(100);
 
         element.Click();
     }
@@ -69,16 +74,30 @@ public class WebRepository : IWebRepository
         element.SendKeys(text);
     }
 
-    public async ValueTask<IWebElement> WaitUntilElementExists(By elementLocator)
+    public void WaitUntilElementExists(By elementLocator)
     {
-        MoveToPopUp();
+        _wait.Until(_driver =>
+        {
+            try
+            {
+                var func = ExpectedConditions.ElementIsVisible(elementLocator);
 
-        return await ValueTask.FromResult(_wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(elementLocator)));
+                var element = func.Invoke(_driver);
+
+                return element != null;
+            }
+            catch { return false; }
+        });
     }
 
-    private void MoveToPopUp()
+    public void MoveToPopUp()
     {
-        _driver.SwitchTo().ActiveElement();
+        _driver.SwitchTo().ActiveElement();        
+    }
+
+    public void MoveToDefault()
+    {
+        _driver.SwitchTo().DefaultContent();
     }
 
     public void StopDriver()
@@ -89,11 +108,6 @@ public class WebRepository : IWebRepository
     public string GetCurrentURL()
     {
         return _driver.Url;
-    }
-
-    public void RefreshPage()
-    {
-        _driver.Navigate().Refresh();
     }
 
     public bool ElementExists(By elementLocator)

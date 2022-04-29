@@ -1,10 +1,7 @@
 ﻿{
-  "ConnectionString": "Data Source=162.248.247.6;Initial Catalog=Bet365Robot_Test;User ID=sa;Password=qJ$WOwufc1!vcCh4wP",
-  "UserDefinedRandomTime": 10,
-  "SecondsPausedEachIteration": 30,
-  "WorldCupIdCompetition": 20120650,
-  "EuroCupIdCompetition": 20700663,
-  "SuperleagueIdCompetition": 20120654,
-  "PremiershipIdCompetition": 20120653,
+  "ConnectionString": "Data Source=162.248.247.6;Initial Catalog=Betfair_Dev;User ID=sa;Password=qJ$WOwufc1!vcCh4wP",
+  "UserDefinedRandomTime": 4,
+  "SecondsPausedEachIteration": 60,
+  "TimeToResetLogsInHours": 24,
   "IsDescritiveOperationsEnabled": false
 }
