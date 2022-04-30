@@ -42,6 +42,10 @@ namespace CommonDatabase.Migrations
                     b.Property<decimal>("MenosDe2_5Gols")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("NomeCompeticao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("NomeTimeCasa")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");

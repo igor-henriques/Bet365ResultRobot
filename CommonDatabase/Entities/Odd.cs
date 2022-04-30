@@ -11,6 +11,8 @@ public record Odd : BaseEntity
 {    
     public EventType TipoEvento { get; set; }
     public DateTime DataInicio { get; set; }
+    [StringLength(50)]
+    public string NomeCompeticao { get; set; }
 
     // Probabilidades ---------------
     [StringLength(50)]

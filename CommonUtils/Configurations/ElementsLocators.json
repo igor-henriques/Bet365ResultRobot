@@ -20,5 +20,6 @@
   "ResultadosClubes": "https://www.betfair.com/sport/virtuals-results?sport=SOCCER&day={0}",
   "ResultadosWorldcup": "https://www.betfair.com/sport/virtuals-results?sport=SOCCER_WORLD_CUP&day={0}",
   "ResultItemHeaderClass": "result-header",
-  "ResultItemClass": "result-item"
+  "ResultItemClass": "result-item",
+  "NomeCompeticaoXPath": "/html/body/div[2]/div/div[2]/div[2]/div/div/div/div/div/div/div[2]/div/div[{0}]/div[1]/div[2]"
 }

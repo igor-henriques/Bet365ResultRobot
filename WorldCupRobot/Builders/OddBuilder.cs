@@ -25,6 +25,8 @@ public class OddBuilder<T> where T : BackgroundService
 
             var competition = typeof(T).Name.Replace("Worker", string.Empty);
 
+            odd.NomeCompeticao = await webRepository.GetElementContent(By.XPath(string.Format(locators.NomeCompeticaoXPath, currentEventIndex + 1)));
+
             odd.TipoEvento = competition.Equals("Clubes") ? CommonDatabase.Enums.EventType.Clubes : CommonDatabase.Enums.EventType.Worldcup;
 
             odd = await ScrapEventDate(odd, currentEvent);

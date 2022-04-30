@@ -25,4 +25,5 @@ public record ElementsLocators
     public string ResultadosWorldcup { get; init; }
     public string ResultItemClass { get; init; }
     public string ResultItemHeaderClass { get; init; }
+    public string NomeCompeticaoXPath { get; init; }
 }
